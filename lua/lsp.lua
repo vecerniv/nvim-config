@@ -1,4 +1,5 @@
 require("mason").setup()
+vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin:" .. vim.env.PATH
 
 vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { desc = "Format local buffer" })
@@ -29,6 +30,11 @@ vim.lsp.config("pyright", {
 	},
 })
 
+vim.lsp.config("clangd", {
+    cmd = { "clangd", "--background-index" },
+	filetypes = { "c", "cpp"  },
+    root_markers = { "compile_commands.json", ".git" },
+})
 vim.lsp.handlers["$/progress"] = function() end
 
 vim.lsp.enable({

@@ -68,7 +68,8 @@ local MiniPick = require("mini.pick")
 MiniPick.setup()
 
 vim.keymap.set("n", "<leader>pf", function() MiniPick.builtin.files() end, { desc = "Mini file picker" })
-vim.keymap.set("n", "<leader>pw", function() MiniPick.builtin.grep( { pattern = vim.fn.expand("<cword>")  } ) end, { desc = "Mini live grep" })
+vim.keymap.set("n", "<leader>pw", function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") }) end,
+	{ desc = "Mini live grep" })
 
 -- mini.extra setup --
 local MiniExtra = require("mini.extra")
@@ -84,7 +85,11 @@ MiniCompletion.setup({
 		auto_setup = true,
 		process_items = function(items, base)
 			return MiniCompletion.default_process_items(items, base, {
-				filtersort = "fuzzy"
+				filtersort = "fuzzy",
+				kind_priority = {
+					Text = -1,
+					Snippet = 99
+				}
 			})
 		end,
 	}
