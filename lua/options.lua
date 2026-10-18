@@ -4,7 +4,7 @@ vim.opt.relativenumber = true
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
-vim.opt.expandtab = false
+vim.opt.expandtab = true
 vim.opt.smartindent = true
 
 vim.opt.splitbelow = true
@@ -21,8 +21,11 @@ vim.opt.undofile = true
 
 vim.opt.clipboard:append("unnamedplus")
 
-vim.opt.termguicolors = true
 vim.opt.guicursor = ""
+vim.opt.wrap = false
+
+vim.opt.updatetime = 250
+vim.opt.inccommand = "split"
 
 vim.opt.scrolloff = 8
 vim.opt.colorcolumn = "0"

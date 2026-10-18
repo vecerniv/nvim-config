@@ -36,7 +36,7 @@ MiniFiles.setup({
 	},
 })
 
-vim.keymap.set("n", "-", "<cmd>lua MiniFiles.open()<CR>", { desc = "Toggle mini file explorer" })
+vim.keymap.set("n", "-", function() MiniFiles.open() end, { desc = "Toggle mini file explorer" })
 
 -- mini.notify setup --
 require("mini.notify").setup({
@@ -69,7 +69,8 @@ MiniPick.setup()
 
 vim.keymap.set("n", "<leader>pf", function() MiniPick.builtin.files() end, { desc = "Mini file picker" })
 vim.keymap.set("n", "<leader>pw", function() MiniPick.builtin.grep({ pattern = vim.fn.expand("<cword>") }) end,
-	{ desc = "Mini live grep" })
+	{ desc = "Mini grep word under cursor" })
+vim.keymap.set("n", "<leader>pg", function() MiniPick.builtin.grep_live() end, { desc = "Mini live grep" })
 
 -- mini.extra setup --
 local MiniExtra = require("mini.extra")
@@ -96,13 +97,12 @@ MiniCompletion.setup({
 })
 
 -- mini.snippets --
--- local MiniSnippets = require("mini.snippets")
--- MiniSnippets.setup({
--- 	snippets = {
--- 		MiniSnippets.gen_loader.from_lang(),
--- 	},
--- })
--- MiniSnippets.start_lsp_server({ match = false })
+local MiniSnippets = require("mini.snippets")
+MiniSnippets.setup({
+	snippets = {
+		MiniSnippets.gen_loader.from_lang(),
+	},
+})
 
 -- mini.diff setup --
 require("mini.diff").setup()
@@ -114,4 +114,4 @@ require("mini.git").setup()
 local MiniTrailspace = require("mini.trailspace")
 MiniTrailspace.setup()
 
-vim.keymap.set("n", "<leader>ot", "<cmd>lua MiniTrailspace.trim()<CR>", { desc = "Trim trailspace" })
+vim.keymap.set("n", "<leader>ot", function() MiniTrailspace.trim() end, { desc = "Trim trailspace" })

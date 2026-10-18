@@ -13,6 +13,9 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = "*",
 	callback = function(args)
 		local buf = args.buf
+		if vim.bo[buf].buftype ~= "" then
+			return
+		end
 		local ft = vim.bo[buf].filetype
 
 		local lang = vim.treesitter.language.get_lang(ft)

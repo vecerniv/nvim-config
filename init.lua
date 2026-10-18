@@ -4,5 +4,6 @@ require("options")
 require("keymaps")
 require("commands")
 require("pack")
+require("filetype")
 
 vim.cmd.colorscheme("tokyonight-night")
