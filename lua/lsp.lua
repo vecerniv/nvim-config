@@ -16,7 +16,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
 
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = buf, desc = "Go to definition" })
-        vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { buffer = buf, desc = "Format local buffer" })
+
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client:supports_method("textDocument/formatting") then
+            vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { buffer = buf, desc = "Format local buffer" })
+        end
 
         vim.keymap.set("n", "<leader>pR", lsp_pick("references"), { buffer = buf, desc = "Pick LSP references" })
         vim.keymap.set("n", "<leader>ps", lsp_pick("document_symbol"), { buffer = buf, desc = "Pick document symbols" })
