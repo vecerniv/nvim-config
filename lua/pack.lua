@@ -40,16 +40,7 @@ vim.keymap.set("n", "-", function() MiniFiles.open() end, { desc = "Toggle mini 
 
 -- mini.notify setup --
 require("mini.notify").setup({
-	-- show messages
-	content = {
-		format = function(notif)
-			-- Filter out LSP progress notifications
-			if notif.msg:match("^%w+ %d+%%$") then
-				return nil
-			end
-			return notif.msg
-		end,
-	},
+	lsp_progress = { enable = false },
 })
 
 -- mini.cmdline setup --
