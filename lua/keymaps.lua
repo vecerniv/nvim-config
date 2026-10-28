@@ -3,14 +3,10 @@ vim.g.mapleader = " "
 vim.keymap.set("n", "<Leader>re", "<cmd>restart<cr>", { desc = "Restart Neovim" })
 
 vim.keymap.set("x", "p", "P", { desc = "Paste over selection without yanking the text" })
-vim.keymap.set({"n", "v"}, "<Leader>d", [["_d]], { desc = "Delete without yanking" })
+vim.keymap.set({ "n", "v" }, "<Leader>d", [["_d]], { desc = "Delete without yanking" })
 
 -- Ctrl-c setup - escape insert
 vim.keymap.set("i", "<C-c>", "<Esc>")
-
--- move lines up and down
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move lines down in visual selection"  })
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move lines up in visual selection"  })
 
 -- better selection indentation
 vim.keymap.set("v", "<", "<gv", { desc = "Unindent and keep selection" })

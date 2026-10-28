@@ -36,8 +36,8 @@ vim.opt.shortmess:append("c")
 vim.o.foldlevelstart = 99
 
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking text",
-	callback = function()
-		vim.hl.on_yank()
-	end,
+    desc = "Highlight when yanking text",
+    callback = function()
+        vim.hl.on_yank()
+    end,
 })
