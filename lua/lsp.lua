@@ -19,6 +19,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	end,
 })
 
+-- lua lsp setup --
 vim.lsp.config("lua_ls", {
 	root_markers = { ".luarc.json", ".git" },
 	settings = {
@@ -28,39 +29,28 @@ vim.lsp.config("lua_ls", {
 	},
 })
 
--- Dynamic venv detection for uv compatibility
-local function get_python_path(workspace)
-	local venv_python = workspace .. "/.venv/bin/python"
-	if vim.fn.filereadable(venv_python) == 1 then
-		return venv_python
-	end
-	return "python3"
-end
-
+-- pyright lsp setup --
 vim.lsp.config("pyright", {
-	root_markers = { "pyproject.toml", "setup.py", ".git" },
-	on_init = function(client)
-		local workspace = client.workspace_folders
-			and client.workspace_folders[1]
-			and client.workspace_folders[1].name
-			or vim.fn.getcwd()
-		client.config.settings = client.config.settings or {}
-		client.config.settings.python = client.config.settings.python or {}
-		client.config.settings.python.pythonPath = get_python_path(workspace)
-		client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-		return true
+	-- nearest uv project, otherwise the script's own directory
+	root_dir = function(bufnr, on_dir)
+		local fname = vim.api.nvim_buf_get_name(bufnr)
+		on_dir(vim.fs.root(fname, { "pyproject.toml", "uv.lock" }) or vim.fs.dirname(fname))
 	end,
-	settings = {
-		python = {
-			analysis = {
-				autoSearchPaths = true,
-				useLibraryCodeForTypes = true,
-				diagnosticMode = "openFilesOnly",
-			},
-		},
-	},
+	-- nearest .venv walking upward (uv's discovery order)
+	before_init = function(_, config)
+		local venv = vim.fs.find(".venv", {
+			path = config.root_dir,
+			upward = true,
+			type = "directory",
+		})[1]
+		if venv then
+			config.settings.python = config.settings.python or {}
+			config.settings.python.pythonPath = vim.fs.joinpath(venv, "bin", "python")
+		end
+	end,
 })
 
+-- clangd lsp setup --
 vim.lsp.config("clangd", {
 	cmd = { "clangd", "--background-index" },
 	filetypes = { "c", "cpp" },
