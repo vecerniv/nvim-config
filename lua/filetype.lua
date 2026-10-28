@@ -1,23 +1,21 @@
+local function foam_if_no_ext(path)
+	if not vim.fs.basename(path):find("%.") then return "foam" end
+end
+
 vim.filetype.add({
-    pattern = {
-        -- Match any file in the specified directories
-        [".*/0%.org/.*"] = "foam",
-        [".*/0/.*"] = "foam",
-        [".*/constant/.*"] = "foam",
-        [".*/system/.*"] = "foam",
-
-        -- Check the first 10 lines of any file for "FoamFile"
-        [".*"] = {
-            function(path, bufnr)
-                local lines = vim.api.nvim_buf_get_lines(bufnr, 0, 10, false)
-                for _, line in ipairs(lines) do
-                    if line:match("FoamFile") then
-                        return "foam"
-                    end
-                end
-            end,
-
-            priority = -math.huge,
-        },
-    },
+	pattern = {
+		[".*/0%.orig/.*"] = foam_if_no_ext,
+		[".*/0/.*"] = foam_if_no_ext,
+		[".*/constant/.*"] = foam_if_no_ext,
+		[".*/system/.*"] = foam_if_no_ext,
+		[".*"] = {
+			function(_, bufnr)
+				for _, line in ipairs(vim.api.nvim_buf_get_lines(bufnr, 0, 10, false)) do
+					if line:match("FoamFile") then return "foam" end
+				end
+			end,
+			{ priority = -math.huge }, -- negative priority: checked after extensions
+		},
+	},
 })
+
