@@ -8,9 +8,6 @@ vim.pack.add({
 	"https://github.com/benomahony/uv.nvim.git"
 })
 
--- uv.nvim lazy-load setup --
-require("uv-config")
-
 -- nvim-treesitter setup --
 require("treesitter")
 
@@ -26,17 +23,22 @@ require("mini.statusline").setup()
 -- mini.files setup --
 local MiniFiles = require("mini.files")
 MiniFiles.setup({
-	mappings = {
-		go_in = "<CR>",
-		go_in_plus = "L",
-		go_out = "h",
-		go_out_plus = "<BS>",
-		reset = "r",
-		close = "<Esc>"
-	},
+    mappings = {
+        go_in = "l",
+        go_in_plus = "<CR>",
+        go_out = "h",
+        go_out_plus = "H",
+        reset = "r",
+        close = "<Esc>",
+    },
 })
 
-vim.keymap.set("n", "-", function() MiniFiles.open() end, { desc = "Toggle mini file explorer" })
+vim.keymap.set("n", "-", function()
+	if MiniFiles.close() == nil then
+		local path = vim.api.nvim_buf_get_name(0)
+		MiniFiles.open(path ~= "" and path or nil) -- unnamed buffer: cwd
+	end
+end, { desc = "Toggle mini file explorer" })
 
 -- mini.notify setup --
 require("mini.notify").setup({
@@ -77,11 +79,7 @@ MiniCompletion.setup({
 		auto_setup = true,
 		process_items = function(items, base)
 			return MiniCompletion.default_process_items(items, base, {
-				filtersort = "fuzzy",
-				kind_priority = {
-					Text = -1,
-					Snippet = 99
-				}
+				kind_priority = { Text = -1, Snippet = 99 }
 			})
 		end,
 	}
@@ -89,11 +87,8 @@ MiniCompletion.setup({
 
 -- mini.snippets --
 local MiniSnippets = require("mini.snippets")
-MiniSnippets.setup({
-	snippets = {
-		MiniSnippets.gen_loader.from_lang(),
-	},
-})
+MiniSnippets.setup({ snippets = { MiniSnippets.gen_loader.from_lang() } })
+MiniSnippets.start_lsp_server()
 
 -- mini.diff setup --
 require("mini.diff").setup()

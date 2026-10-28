@@ -1,39 +1,39 @@
-vim.opt.nu = true
-vim.opt.relativenumber = true
+vim.o.nu = true
+vim.o.relativenumber = true
 
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-vim.opt.smartindent = true
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
+vim.o.smartindent = true
 
-vim.opt.splitbelow = true
-vim.opt.splitright = true
+vim.o.splitbelow = true
+vim.o.splitright = true
 
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.laststatus = 3
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.laststatus = 3
 
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
-vim.opt.undofile = true
+vim.o.swapfile = false
+vim.o.backup = false
+vim.o.undofile = true
 
 vim.opt.clipboard:append("unnamedplus")
 
-vim.opt.guicursor = ""
-vim.opt.wrap = false
+vim.o.guicursor = ""
+vim.o.wrap = false
+vim.o.updatetime = 250
+vim.o.inccommand = "split"
 
-vim.opt.updatetime = 250
-vim.opt.inccommand = "split"
+vim.o.scrolloff = 8
+vim.o.colorcolumn = "0"
+vim.o.signcolumn = "yes"
+vim.o.cmdheight = 0
 
-vim.opt.scrolloff = 8
-vim.opt.colorcolumn = "0"
-vim.opt.signcolumn = "yes"
-vim.opt.cmdheight = 0
-
-vim.opt.completeopt = "menuone,noselect,fuzzy,nosort"
+vim.o.completeopt = "menuone,noselect,fuzzy,nosort"
 vim.opt.shortmess:append("c")
+
+vim.o.foldlevelstart = 99
 
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking text",

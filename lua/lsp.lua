@@ -1,14 +1,11 @@
 require("mason").setup()
-vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin:" .. vim.env.PATH
 
 vim.diagnostic.config({
 	virtual_text = true,
 })
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = vim.tbl_deep_extend("force", capabilities, require("mini.completion").get_lsp_capabilities())
-
-vim.lsp.config("*", { capabilities = capabilities })
+-- append mini.completion capabilities
+vim.lsp.config("*", { capabilities = require("mini.completion").get_lsp_capabilities() })
 
 -- Buffer-local LSP keymaps via LspAttach
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -51,12 +48,9 @@ vim.lsp.config("pyright", {
 })
 
 -- clangd lsp setup --
-vim.lsp.config("clangd", {
-	cmd = { "clangd", "--background-index" },
-	filetypes = { "c", "cpp" },
-	root_markers = { "compile_commands.json", ".git" },
-})
+vim.lsp.config("clangd", { filetypes = { "c", "cpp" } })
 
+-- lsp enable
 vim.lsp.enable({
 	"lua_ls",
 	"clangd",
