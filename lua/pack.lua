@@ -172,6 +172,7 @@ MiniClue.setup({
         { mode = "n", keys = "<Leader>p", desc = "+Pick" },
         { mode = "n", keys = "<Leader>x", desc = "+Diagnostics" },
         { mode = "n", keys = "<Leader>o", desc = "+Other" },
+        { mode = "n", keys = "<Leader>b", desc = "+Build" },
 
         MiniClue.gen_clues.square_brackets(),
         MiniClue.gen_clues.builtin_completion(),

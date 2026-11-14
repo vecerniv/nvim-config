@@ -1,5 +1,25 @@
 require("mason").setup()
 
+-- mason tool list
+local tools = {
+    -- LSP servers
+    "bash-language-server", "clangd", "foam-language-server", "html-lsp",
+    "lua-language-server", "pyright", "texlab", "vale-ls",
+    -- linters / formatters
+    "shellcheck", "shfmt", "htmlhint", "pyink", "mbake", "tex-fmt", "vale",
+}
+
+local registry = require("mason-registry")
+registry.refresh(function()
+    for _, name in ipairs(tools) do
+        local ok, pkg = pcall(registry.get_package, name)
+        if ok and not pkg:is_installed() and not pkg:is_installing() then
+            pkg:install()
+        end
+    end
+end)
+
+-- enable virtual text for diagnostics
 vim.diagnostic.config({
     virtual_text = true,
 })
@@ -15,13 +35,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
             return function() require("mini.extra").pickers.lsp({ scope = scope }) end
         end
 
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = buf, desc = "Go to definition" })
-
         local client = vim.lsp.get_client_by_id(args.data.client_id)
         if client and client:supports_method("textDocument/formatting") then
             vim.keymap.set("n", "<leader>f", vim.lsp.buf.format, { buffer = buf, desc = "Format local buffer" })
         end
 
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = buf, desc = "Go to definition" })
         vim.keymap.set("n", "<leader>pR", lsp_pick("references"), { buffer = buf, desc = "Pick LSP references" })
         vim.keymap.set("n", "<leader>ps", lsp_pick("document_symbol"), { buffer = buf, desc = "Pick document symbols" })
         vim.keymap.set("n", "<leader>pS", lsp_pick("workspace_symbol_live"),
@@ -64,10 +83,28 @@ vim.lsp.config("pyright", {
 -- clangd lsp setup --
 vim.lsp.config("clangd", { filetypes = { "c", "cpp" } })
 
--- lsp enable
+-- texlab lsp setup --
+vim.lsp.config("texlab", {
+	settings = {
+		texlab = {
+			latexFormatter = "tex-fmt",
+			build = {
+				executable = "latexmk",
+				args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "-file-line-error", "%f" },
+				useFileList = true,
+			},
+		},
+	},
+})
+
+-- vale lsp setup
+vim.lsp.config("vale_ls", {
+    filetypes = { "markdown", "text", "rst" }, -- exclude: tex/html/xml//asciidoc
+    init_options = { syncOnStartup = true },
+})
+
+-- enable all of this shit
 vim.lsp.enable({
-    "lua_ls",
-    "clangd",
-    "pyright",
-    "bashls",
+    "bashls", "clangd", "foam_ls", "html",
+    "lua_ls", "pyright", "texlab", "vale_ls",
 })

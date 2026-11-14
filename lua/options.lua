@@ -41,3 +41,13 @@ vim.api.nvim_create_autocmd("TextYankPost", {
         vim.hl.on_yank()
     end,
 })
+
+-- always flag texfiles as tex, not plaintex
+vim.g.tex_flavor = "latex"
+
+vim.g.python_indent = {
+    open_paren = "shiftwidth()",          -- after an open ( [ {
+    nested_paren = "shiftwidth()",
+    continue = "shiftwidth()",            -- after a backslash
+    closed_paren_align_last_line = false, -- closing ) goes back to the statement's indent
+}
